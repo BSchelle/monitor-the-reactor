@@ -1,5 +1,7 @@
 # ignore all logs
 *.log
+.DS_Store
+.python-version
 DATA
 Explo
 raw_data
