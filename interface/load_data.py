@@ -18,3 +18,4 @@ def load_data_faulty_test():
 def load_data_faulty_train():
     path = os.path.join(BASE_DIR, '..', 'raw_data', 'TEP_Faulty_Training.csv')
     return pd.read_csv(path)
+##
