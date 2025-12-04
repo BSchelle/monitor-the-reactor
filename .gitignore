@@ -4,5 +4,6 @@
 .python-version
 Data
 Explo
-raw_data
-
+Data/raw_data
+Data/BS_data_process
+Data/processed_data
