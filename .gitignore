@@ -2,6 +2,6 @@
 *.log
 .DS_Store
 .python-version
-notebooks/Explo_BS
+Explo_BS
 Data
 data
