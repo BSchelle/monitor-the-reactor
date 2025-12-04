@@ -2,7 +2,7 @@
 *.log
 .DS_Store
 .python-version
-DATA
+Data
 Explo
 Data/raw_data
 Data/BS_data_process
