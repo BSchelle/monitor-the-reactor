@@ -7,4 +7,4 @@ pandas==1.5.3
 pylint
 pytest
 scikit-learn==1.3.1
-seaborn==1.3.1
+seaborn==0.13.2
