@@ -3,6 +3,6 @@
 .DS_Store
 .python-version
 Explo
-Data/raw_data
+Data/raw_data/.
+Data/processed_data/.
 Data/BS_data_process
-Data/processed_data
