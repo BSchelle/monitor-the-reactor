@@ -2,6 +2,7 @@
 *.log
 .DS_Store
 .python-version
+data/
 Explo
 Data/raw_data/.
 Data/processed_data/.
