@@ -2,8 +2,5 @@
 *.log
 .DS_Store
 .python-version
-Explo_BS
-Data/raw_data/.
-Data/processed_data/.
-Data/BS_data_process
-notebooks/Explo_BS/reduced_data_200_runs_10h
+notebooks/Explo_BS
+Data
