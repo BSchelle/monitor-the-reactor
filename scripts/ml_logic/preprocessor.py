@@ -43,7 +43,6 @@ def preprocess_and_split(df) -> tuple:
         # Cela permet de normaliser chaque feature indépendamment du temps
 
         num_features = X_train.shape[1]        # Number of features
-        timesteps_per_sequence = 500 / SAMPLE_DIVISION # Assuming 500 timesteps per sequence. PLEASE VERIFY.
 
         # Ensure training set has complete sequences by trimming excess rows
         num_rows_train_fold = X_train.shape[0]
