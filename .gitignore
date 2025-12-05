@@ -4,3 +4,6 @@
 .python-version
 notebooks/Explo_BS
 data
+raw_data
+processed_data
+models
