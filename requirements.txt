@@ -1,5 +1,9 @@
 colorama
 ipdb
+google
+google-cloud
+google-cloud-storage
+google-cloud-bigquery
 joblib
 jupyterlab
 kagglehub
