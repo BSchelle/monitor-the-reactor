@@ -10,8 +10,8 @@ def preprocess_and_split(df) -> tuple:
 
     timesteps_per_sequence = 500 / SAMPLE_DIVISION
 
-    int_cols = COLUMN_NAMES_RAW[0:3]   # ['faultNumber', 'simulationRun', 'sample']
-    float_cols = COLUMN_NAMES_RAW[3:]
+    int_cols = COLUMNS_NAMES_RAW[0:3]   # ['faultNumber', 'simulationRun', 'sample']
+    float_cols = COLUMNS_NAMES_RAW[3:]
 
     dtype_map = {col: 'int16' for col in int_cols}
     dtype_map.update({col: 'float32' for col in float_cols})
