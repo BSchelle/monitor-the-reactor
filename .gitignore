@@ -1,5 +1,7 @@
 # ignore all logs
 *.log
+.env
+.envrc
 .DS_Store
 .python-version
 notebooks/Explo_BS

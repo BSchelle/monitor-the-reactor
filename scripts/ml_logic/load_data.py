@@ -1,7 +1,11 @@
 import os
 import pandas as pd
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 def load_data_fault_free_test():
     path = os.path.join(BASE_DIR, '..', 'raw_data', 'TEP_FaultFree_Testing.csv')
