@@ -24,6 +24,9 @@ logging.basicConfig(
     stream=sys.stdout
 )
 
+# Configuration de la seed pour le sampling du test set
+np.random.seed(42)
+
 def main():
     """
     Fonction principale d'orchestration du pipeline ML.
@@ -62,9 +65,9 @@ def main():
         # ---------------------------------------------------------
         logging.info(f"🏋️‍♂️ Initialisation du modèle {MODEL_ARCHITECTURE} en cours...")
         input_shape = X_train.shape[1:]
-        if MODEL_ARCHITECTURE.capitalize() == 'CNN':
+        if MODEL_ARCHITECTURE == 'CNN':
             model = initialize_model_CNN(input_shape)
-        elif MODEL_ARCHITECTURE.capitalize() == 'RNN':
+        elif MODEL_ARCHITECTURE == 'RNN':
             model = initialize_model_RNN(input_shape)
         else :
             raise ValueError("Aucune architecture de DL initialisée !")
@@ -72,14 +75,14 @@ def main():
         logging.info("🏋️‍♂️ Compilation du modèle en cours...")
         model = compile_model(model)
         logging.info("🏋️‍♂️ Entraînement du modèle en cours...")
-        model = train_model(model, X_train, y_train)
+        model, history = train_model(model, X_train, y_train)
         logging.info("✅ Modèle entraîné avec succès.")
 
         # ---------------------------------------------------------
         # ÉTAPE 4 : Sauvegarde du modèle
         # ---------------------------------------------------------
         logging.info(f"💾 Sauvegarde du modèle vers {MODEL_PATH}...")
-        save_model(model, MODEL_PATH)
+        # save_model(model, MODEL_PATH)
         # Note : Si vous êtes sur GCC, pensez à uploader ce fichier sur GCS (Google Cloud Storage)
         # pour ne pas le perdre si la VM s'éteint.
 
@@ -94,7 +97,8 @@ def main():
         # ÉTAPE 6 : Prédictions (Optionnel ou sur un set de validation)
         # ---------------------------------------------------------
         logging.info("🔮 Génération de prédictions exemples...")
-        sample_input = X_test.sample(n=10, random_state=42)
+        random_indices = np.random.choice(X_test.shape[0], size=10, replace=False)
+        sample_input = X_test[random_indices]
         preds = make_predictions(model, sample_input)
         logging.info(f"✅ Prédictions terminées : {preds}")
 
