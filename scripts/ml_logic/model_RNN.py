@@ -15,7 +15,7 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 end = time.perf_counter()
 print(f"\n✅ TensorFlow loaded ({round(end - start, 2)}s)")
 
-def initialize_model_CNN(input_shape: tuple) -> Model:
+def initialize_model_RNN(input_shape: tuple) -> Model:
     """
     Initialize the Neural Network with random weights
     """
