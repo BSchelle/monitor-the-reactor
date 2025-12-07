@@ -90,7 +90,7 @@ def train_model(
         model: Model,
         X: np.ndarray,
         y: np.ndarray,
-        batch_size=256,
+        batch_size=32,
         patience=10,
         validation_data=None, # overrides validation_split
         validation_split=0.2

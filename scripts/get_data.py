@@ -8,6 +8,8 @@ def get_data(
     col_to_drop=0,
     sample_division=SAMPLE_DIVISION,
 ) :
+    if N_TH_FIRST_FEATURES !=0 or not None:
+        col_to_keep = COLUMN_NAMES[:N_TH_FIRST_FEATURES+3]
 
     if col_to_keep == 0:
         query = f"""
