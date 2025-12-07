@@ -75,23 +75,21 @@ def main():
         logging.info("🏋️‍♂️ Compilation du modèle en cours...")
         model = compile_model(model)
         logging.info("🏋️‍♂️ Entraînement du modèle en cours...")
-        model, history = train_model(model, X_train, y_train)
+        model, history = train_model(model, X_train, y_train, patience=3)
         logging.info("✅ Modèle entraîné avec succès.")
-
-        # ---------------------------------------------------------
-        # ÉTAPE 4 : Sauvegarde du modèle
-        # ---------------------------------------------------------
-        logging.info(f"💾 Sauvegarde du modèle vers {MODEL_PATH}...")
-        # save_model(model, MODEL_PATH)
-        # Note : Si vous êtes sur GCC, pensez à uploader ce fichier sur GCS (Google Cloud Storage)
-        # pour ne pas le perdre si la VM s'éteint.
 
         # ---------------------------------------------------------
         # ÉTAPE 5 : Test et Métriques
         # ---------------------------------------------------------
         logging.info("📊 Évaluation des performances...")
-        metrics = evaluate_and_get_f1(model, X_test, y_test)
-        logging.info(f"📈 Résultats du test : {metrics}")
+        f1 = evaluate_and_get_f1(model, X_test, y_test)
+        logging.info(f"📈 Résultats du test : {f1}")
+
+        # ---------------------------------------------------------
+        # ÉTAPE 4 : Sauvegarde du modèle
+        # ---------------------------------------------------------
+        logging.info(f"💾 Sauvegarde du modèle vers {MODEL_PATH}...")
+        save_model(model, f1, BUCKET_NAME)
 
         # ---------------------------------------------------------
         # ÉTAPE 6 : Prédictions (Optionnel ou sur un set de validation)

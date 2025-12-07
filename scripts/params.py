@@ -10,6 +10,7 @@ import numpy as np
 # CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE"))
 SAMPLE_DIVISION = int(os.environ.get("SAMPLE_DIVISION"))
 SCALER = os.environ.get("SCALER")
+N_TH_FIRST_FEATURES = int(os.environ.get("N_TH_FIRST_FEATURES"))
 # MODEL_TARGET = os.environ.get("MODEL_TARGET")
 GCP_PROJECT_NAME = os.environ.get("GCP_PROJECT_NAME")
 SAMPLE_DIVISION = int(os.environ.get('SAMPLE_DIVISION'))
@@ -17,7 +18,7 @@ SAMPLE_DIVISION = int(os.environ.get('SAMPLE_DIVISION'))
 # GCP_REGION = os.environ.get("GCP_REGION")
 BQ_DATASET = os.environ.get("BQ_DATASET")
 # BQ_REGION = os.environ.get("BQ_REGION")
-# BUCKET_NAME = os.environ.get("BUCKET_NAME")
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
 # INSTANCE = os.environ.get("INSTANCE")
 # MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
 # MLFLOW_EXPERIMENT = os.environ.get("MLFLOW_EXPERIMENT")
@@ -41,6 +42,7 @@ COLUMN_NAMES = ['faultNumber', 'simulationRun', 'sample', 'xmeas_1', 'xmeas_2',
        'xmeas_33', 'xmeas_34', 'xmeas_35', 'xmeas_36', 'xmeas_37', 'xmeas_38',
        'xmeas_39', 'xmeas_40', 'xmeas_41', 'xmv_1', 'xmv_2', 'xmv_3', 'xmv_4',
        'xmv_5', 'xmv_6', 'xmv_7', 'xmv_8', 'xmv_9', 'xmv_10', 'xmv_11']
+
 BQ_FAULTY_TRAIN = 'TEP_Faulty_Training'
 
 

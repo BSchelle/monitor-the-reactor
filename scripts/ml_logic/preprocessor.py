@@ -11,7 +11,7 @@ def preprocess_and_split(df) -> tuple:
     timesteps_per_sequence = 500 / SAMPLE_DIVISION
 
     int_cols = COLUMN_NAMES[0:3]   # ['faultNumber', 'simulationRun', 'sample']
-    float_cols = COLUMN_NAMES[3:]
+    float_cols = COLUMN_NAMES[3: 3+N_TH_FIRST_FEATURES]
 
     dtype_map = {col: 'int16' for col in int_cols}
     dtype_map.update({col: 'float32' for col in float_cols})
@@ -19,9 +19,8 @@ def preprocess_and_split(df) -> tuple:
     df = df.astype(dtype_map)
 
     # 1. Simulation des données
-    # (500 séquences, 50 pas de temps, 52 features)
-    X = df.drop(columns=['faultNumber', 'simulationRun', 'sample']) # Drop simulationRun and sample if they are not features
-
+    # Drop simulationRun and sample if they are not features
+    X = df.drop(columns=['faultNumber', 'simulationRun', 'sample'])
     # 20 classes
     y = df['faultNumber']
 
