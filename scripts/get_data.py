@@ -1,5 +1,8 @@
+from scripts.params import *
+from google.cloud import bigquery
+
 def get_data(
-    project_id=GCP_MONITOR_THE_REACTOR,
+    project_id=GCP_PROJECT_NAME,
     dataset=BQ_FAULTY_TRAIN,
     col_to_keep=0,
     col_to_drop=0,

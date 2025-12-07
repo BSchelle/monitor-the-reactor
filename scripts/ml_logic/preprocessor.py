@@ -10,13 +10,13 @@ def preprocess_and_split(df) -> tuple:
 
     timesteps_per_sequence = 500 / SAMPLE_DIVISION
 
-    int_cols = COLUMNS_NAMES_RAW[0:3]   # ['faultNumber', 'simulationRun', 'sample']
-    float_cols = COLUMNS_NAMES_RAW[3:]
+    # int_cols = COLUMN_NAMES[0:3]   # ['faultNumber', 'simulationRun', 'sample']
+    # float_cols = COLUMN_NAMES[3:]
 
-    dtype_map = {col: 'int16' for col in int_cols}
-    dtype_map.update({col: 'float32' for col in float_cols})
+    # dtype_map = {col: 'int16' for col in int_cols}
+    # dtype_map.update({col: 'float32' for col in float_cols})
 
-    df = df.astype(dtype_map)
+    # df = df.astype(dtype_map)
 
     # 1. Simulation des données
     # (500 séquences, 50 pas de temps, 52 features)
@@ -46,8 +46,22 @@ def preprocess_and_split(df) -> tuple:
         timesteps_per_sequence = 500 / SAMPLE_DIVISION # Assuming 500 timesteps per sequence. PLEASE VERIFY.
 
         # Ensure training set has complete sequences by trimming excess rows
+
         num_rows_train_fold = X_train.shape[0]
-        remainder_train = num_rows_train_fold % timesteps_per_sequence
+        remainder_train = int(len(X_train) % timesteps_per_sequence) # <--- Forcez le type int ici
+
+        if remainder_train > 0:
+            print(f"Warning: Trimming {remainder_train} rows from training set...")
+            # Le cast int() ici aussi par sécurité, mais surtout la condition if > 0
+            X_train = X_train.iloc[:-int(remainder_train)]
+        else:
+            print("Sequence fits perfectly, no trimming needed.")
+
+        # Faites la même chose pour le set de test si nécessaire
+        remainder_test = int(len(X_test) % timesteps_per_sequence)
+        if remainder_test > 0:
+            X_test = X_test.iloc[:-int(remainder_test)]
+
         if remainder_train != 0:
             print(f"Warning: Trimming {remainder_train} rows from training set to ensure complete sequences.")
             X_train = X_train.iloc[:-remainder_train]
@@ -90,4 +104,8 @@ def preprocess_and_split(df) -> tuple:
         print(f"Train shape: {X_train_final.shape}, Train type : {type(X_train_final)}")
         print(f"Test shape:  {X_test_final.shape}, Test type : {type(X_test_final)}")
 
-    return (X_train_final, X_test_final)
+    # Returning a unique (0-19) label for each simulation
+    y_train_seq = y_train.iloc[::timesteps_per_sequence] - 1
+    y_test_seq = y_test.iloc[::timesteps_per_sequence] - 1
+
+    return X_train_final, X_test_final, y_train_seq, y_test_seq

@@ -5,3 +5,6 @@ pylint:
 
 pytest:
 	PYTHONDONTWRITEBYTECODE=1 pytest -v --color=yes
+
+run_main:
+	python -c 'from scripts.main import main; main()'
