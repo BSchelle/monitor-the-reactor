@@ -8,7 +8,8 @@ def get_data(
     col_to_drop=None,
     sample_division=SAMPLE_DIVISION,
     number_simulations=NUMBER_SIMULATIONS,
-    fault=None) :
+    fault=None
+) :
 
     if col_to_keep == None:
         col_left = tuple(set(COLUMN_NAMES) - set(col_to_drop))
@@ -26,7 +27,7 @@ def get_data(
             query = f"""
             SELECT {', '.join(col_left)}
             FROM `{project_id}`.`{dataset}`.`csv`
-            WHERE faultNumber = {fault}
+            WHERE faultNumber in {fault}
                 AND simulationRun = 1
                 AND MOD(sample, {sample_division}) = 0
                 AND simulationRun <= {number_simulations}
@@ -47,7 +48,7 @@ def get_data(
             query = f"""
             SELECT {', '.join(col_to_keep)}
             FROM `{project_id}`.`{dataset}`.`csv`
-            WHERE faultNumber = {fault}
+            WHERE faultNumber in {fault}
                 AND simulationRun = 1
                 AND MOD(sample, {sample_division}) = 0
                 AND simulationRun <= {number_simulations}

@@ -8,3 +8,6 @@ pytest:
 
 run_main:
 	python -c 'from scripts.main import main; main()'
+
+run_load_eval:
+	python -c 'from scripts.main import load_eval; load_eval()'

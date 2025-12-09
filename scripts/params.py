@@ -46,8 +46,6 @@ COLUMN_NAMES = ['faultNumber', 'simulationRun', 'sample', 'xmeas_1', 'xmeas_2',
 
 BQ_FAULTY_TRAIN = 'TEP_Faulty_Training'
 
-
-
 BQ_DATASET = BQ_FAULTY_TRAIN
 
 COLUMNS_TO_KEEP = (COLUMN_NAMES)
@@ -55,3 +53,7 @@ COLUMNS_TO_KEEP = (COLUMN_NAMES)
 COLUMNS_TO_DROP = tuple(set(COLUMN_NAMES) - set())
 
 MODEL_ARCHITECTURE = os.environ.get('MODEL_ARCHITECTURE')
+
+NUMBER_SIMULATIONS = os.environ.get('NUMBER_SIMULATIONS')
+
+MODEL_NAME = os.environ.get("MODEL_NAME")

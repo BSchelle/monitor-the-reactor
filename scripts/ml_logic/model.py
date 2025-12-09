@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 from google.cloud import storage
 from sklearn.metrics import f1_score, classification_report
+from scripts.params import *
 
 from colorama import Fore, Style
 from typing import Tuple
@@ -135,9 +136,10 @@ def make_predictions(model: Model, X: np.ndarray) -> np.ndarray:
 
     # On prend l'index de la probabilité la plus élevée
     y_pred_classes = np.argmax(y_pred_probs, axis=1)
+    y_pred_confidence = y_pred_probs[np.arange(len(y_pred_probs)), y_pred_classes]
 
     print(f"✅ Predictions generated. Shape: {y_pred_classes.shape}")
-    return y_pred_classes
+    return y_pred_classes, y_pred_confidence
 
 def evaluate_and_get_f1(model: Model, X_test: np.ndarray, y_test: np.ndarray) -> float:
     """
@@ -194,3 +196,23 @@ def save_model(model: Model, f1: float, bucket_name=None) -> None:
             print(f"\n❌ Error uploading to GCS: {e}")
             # On ne raise pas l'erreur pour ne pas crasher le script si juste l'upload échoue,
             # car le modèle est déjà sauvé en local.
+
+def load_model(model_name: str,  bucket_name=None) -> Model:
+
+    if bucket_name:
+        try:
+            print(Fore.BLUE + f"Loading from GCS bucket: {bucket_name}..." + Style.RESET_ALL)
+
+            model_path = f'gs://{bucket_name}/models/{model_name}'
+            instantiated_model = keras.models.load_model(model_path)
+
+            print(f"✅ Model loaded from gs://{bucket_name}/models/{model_name}")
+
+            instantiated_model.summary()
+
+        except Exception as e:
+            print(f"❌ Erreur lors du chargement du modèle : {e}")
+    else:
+        instantiated_model = keras.models.load_model("/home/bapt/code/Monitor-the-Reactor/notebooks/Explo_BS/models_keras/models_model_20251209-171751_f1-0.6531.keras")
+
+    return instantiated_model
