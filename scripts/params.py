@@ -55,3 +55,5 @@ COLUMNS_TO_KEEP = (COLUMN_NAMES)
 COLUMNS_TO_DROP = tuple(set(COLUMN_NAMES) - set())
 
 MODEL_ARCHITECTURE = os.environ.get('MODEL_ARCHITECTURE')
+
+FAULT = os.environ.get('FAULT')
