@@ -212,12 +212,12 @@ def load_eval():
         # ---------------------------------------------------------
         logging.info(f"📥 Chargement des données depuis BigQuery : {GCP_PROJECT_NAME}.{BQ_DATASET}")
 
-        # raw_df = get_data(project_id=GCP_PROJECT_NAME,
-        #                   dataset=BQ_FAULTY_TRAIN,
-        #                   col_to_keep=COLUMN_NAMES,
-        #                   sample_division=10,
-        #                   number_simulations=1,
-        #                   fault=(1))
+        raw_df = get_data(project_id=GCP_PROJECT_NAME,
+                          dataset=BQ_FAULTY_TRAIN,
+                          col_to_keep=COLUMN_NAMES,
+                          sample_division=10,
+                          number_simulations=1,
+                          fault=None)
 
         # raw_df = pd.read_csv('/home/bapt/code/Monitor-the-Reactor/data/processed_data/faulty_train_fault1_sim1.csv')
         # raw_df = raw_df[::10]

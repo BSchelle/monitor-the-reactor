@@ -125,20 +125,29 @@ def train_model(
 
     return model, history
 
-def make_predictions(model: Model, X: np.ndarray) -> np.ndarray:
+def make_predictions(model, X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """
-    Génère des prédictions de classes (argmax) à partir des probabilités.
+    Génère des prédictions de classes (argmax) et leur confiance,
+    en ajustant l'indexation (0-19) vers les labels (1-20).
     """
     print(Fore.BLUE + f"\nPredicting on {len(X)} rows..." + Style.RESET_ALL)
 
-    # model.predict renvoie des probabilités (ex: [0.1, 0.8, 0.1])
+    # 1. Prédiction des probabilités
     y_pred_probs = model.predict(X)
 
-    # On prend l'index de la probabilité la plus élevée
-    y_pred_classes = np.argmax(y_pred_probs, axis=1)
-    y_pred_confidence = y_pred_probs[np.arange(len(y_pred_probs)), y_pred_classes]
+    # 2. Détermination de l'index de la probabilité la plus élevée (0-19)
+    y_pred_classes_indices = np.argmax(y_pred_probs, axis=1)
+
+    # 3. CORRECTION : AJOUTER 1 pour passer de l'index 0-19 au label 1-20
+    # Le résultat final est la liste des labels prédits (1, 2, ..., 20)
+    y_pred_classes = y_pred_classes_indices + 1
+
+    # 4. Calcul de la confiance (la probabilité maximale)
+    y_pred_confidence = y_pred_probs[np.arange(len(y_pred_probs)), y_pred_classes_indices]
 
     print(f"✅ Predictions generated. Shape: {y_pred_classes.shape}")
+
+    # Retourne les labels (1-20) et leur confiance
     return y_pred_classes, y_pred_confidence
 
 def evaluate_and_get_f1(model: Model, X_test: np.ndarray, y_test: np.ndarray) -> float:
