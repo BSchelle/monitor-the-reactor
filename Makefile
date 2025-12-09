@@ -11,3 +11,6 @@ run_main:
 
 run_load_eval:
 	python -c 'from scripts.main import load_eval; load_eval()'
+
+run_load_eval_partial:
+	python -c 'from scripts.main import load_eval_partial; load_eval_partial()'

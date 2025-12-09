@@ -225,3 +225,45 @@ def load_model(model_name: str,  bucket_name=None) -> Model:
         instantiated_model = keras.models.load_model("/home/bapt/code/Monitor-the-Reactor/notebooks/Explo_BS/models_keras/models_model_20251209-171751_f1-0.6531.keras")
 
     return instantiated_model
+
+import numpy as np
+
+def preprocess_and_predict_partial_bulk(
+    X_partial_3d: np.ndarray, # Nommer X_partial_3d pour plus de clarté
+    scaler,
+    model
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Applique la normalisation et le padding à un ensemble de séquences partielles 3D.
+    """
+    N, TIMESTEPS_PARTIAL, N_FEATURES = X_partial_3d.shape
+    TIMESTEPS_ENTRAINEMENT = 50 # Assurez-vous d'avoir cette constante
+
+    # 1. Reshape de 3D vers 2D pour la normalisation
+    X_2d_raw = X_partial_3d.reshape(-1, N_FEATURES)
+
+    # 2. Normalisation (UNIQUEMENT .transform())
+    X_scaled_2d = scaler.transform(X_2d_raw)
+
+    # 3. Reshape vers 3D (N, 20, 52)
+    X_scaled_3d = X_scaled_2d.reshape(N, TIMESTEPS_PARTIAL, N_FEATURES)
+
+    # 4. Padding Temporel (N, 20, 52) -> (N, 50, 52)
+    padding_needed = TIMESTEPS_ENTRAINEMENT - TIMESTEPS_PARTIAL # 50 - 20 = 30
+
+    # Création du padding (N, 30, 52)
+    # Note : Le padding doit être ajouté à la dernière dimension (timesteps)
+    zero_padding = np.zeros((N, padding_needed, N_FEATURES), dtype=X_partial_3d.dtype)
+
+    # Concaténation le long de l'axe des timesteps (axe 1)
+    X_padded_final = np.concatenate((X_scaled_3d, zero_padding), axis=1) # Forme (N, 50, 52)
+
+    # 5. Prédiction
+    y_pred_probs = model.predict(X_padded_final)
+
+    # 6. Post-traitement (labels 1-20 et confiance)
+    y_pred_classes_indices = np.argmax(y_pred_probs, axis=1)
+    y_pred_classes = y_pred_classes_indices + 1
+    y_pred_confidence = y_pred_probs[np.arange(N), y_pred_classes_indices]
+
+    return y_pred_classes, y_pred_confidence

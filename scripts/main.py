@@ -11,7 +11,7 @@ from scripts.ml_logic.preprocessor import preprocess_and_split, \
 
 from scripts.ml_logic.model import initialize_model_CNN, initialize_model_RNN, \
     compile_model, train_model, make_predictions, evaluate_and_get_f1, \
-        save_model, load_model
+        save_model, load_model, preprocess_and_predict_partial_bulk
 
 from scripts.params import *
 
@@ -261,6 +261,75 @@ def load_eval():
 
     logging.info("🏁 Fin du pipeline avec succès.")
 
+def load_eval_partial():
+    """
+    Fonction d'orchestration du chargement et de l'évaluation d'un modèle ML.
+    """
+    logging.info("🚀 Démarrage du pipeline d'évaluation...")
+
+    # 1. Configuration et Paramètres
+    # Idéalement, utilisez des variables d'environnement sur le Cloud
+    MODEL_PATH = "model.joblib" # Ou un chemin GCS: gs://mon-bucket/model.joblib
+
+
+    try:
+        # ---------------------------------------------------------
+        # ÉTAPE 1 : Chargement des données (BigQuery)
+        # ---------------------------------------------------------
+        logging.info(f"📥 Chargement des données depuis BigQuery : {GCP_PROJECT_NAME}.{BQ_DATASET}")
+
+        raw_df = get_data(project_id=GCP_PROJECT_NAME,
+                          dataset=BQ_FAULTY_TRAIN,
+                          col_to_keep=COLUMN_NAMES,
+                          sample_division=10,
+                          number_simulations=1,
+                          fault=None)
+
+        # raw_df = pd.read_csv('/home/bapt/code/Monitor-the-Reactor/data/processed_data/faulty_train_fault1_sim1.csv')
+        # raw_df = raw_df[::10]
+        # ---------------------------------------------------------
+        # ÉTAPE 2 : Chargement du scaler
+        # ---------------------------------------------------------
+        logging.info(f"📥 Chargement du scaler")
+        scaler = load_preprocessor('scripts/ml_logic/scaler/scaler.pkl')
+        logging.info(f"✅ Scaler chargé ")
+
+        # ---------------------------------------------------------
+        # ÉTAPE 3 : Prétraitement du dataset
+        # ---------------------------------------------------------
+        logging.info("⚙️ Traitement des données et split X_eval, y_eval")
+        # On suppose que process_data renvoie les sets divisés
+        X_eval, y_eval = preprocess_simulation(raw_df, scaler,
+                                     timesteps_per_sequence= 50)
+        logging.info(f"✅ Données traitées. X_eval shape: {X_eval.shape}, y_eval shape : {y_eval.shape}")
+
+        # ---------------------------------------------------------
+        # ÉTAPE 4 : Chargement du modèle entrainé
+        # ---------------------------------------------------------
+        logging.info("⚙️ Chargement du modèle : {MODEL_NAME}")
+        model = load_model(model_name = MODEL_NAME)
+        logging.info("✅ Modèle : {MODEL_NAME} chargé")
+
+        # ---------------------------------------------------------
+        # ÉTAPE 5 : Prediction de X_eval
+        # ---------------------------------------------------------
+        logging.info("🔮 Génération de prédictions exemples...")
+        preds, confidence = preprocess_and_predict_partial_bulk(
+            X_eval[:,:50,:],
+            scaler,
+            model
+        )
+        print(preds)
+        print(confidence)
+        logging.info(f"✅ Prédictions terminées : {preds}")
+
+
+    except Exception as e:
+        logging.error(f"❌ Une erreur critique est survenue dans le pipeline : {e}")
+        # Re-raise l'erreur pour que le job Cloud soit marqué comme 'Failed'
+        raise e
+
+    logging.info("🏁 Fin du pipeline avec succès.")
 
 if __name__ == '__main__':
     main()
