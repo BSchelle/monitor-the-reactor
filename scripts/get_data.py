@@ -18,7 +18,7 @@ def get_data(
             query = f"""
             SELECT {', '.join(col_left)}
             FROM `{project_id}`.`{dataset}`.`csv`
-            WHERE MOD(sample, {sample_division}) = 0
+            WHERE MOD(sample, {sample_division}) = 1
                 AND simulationRun <= {number_simulations}
             ORDER BY simulationRun, faultNumber, sample
             """
@@ -28,8 +28,7 @@ def get_data(
             SELECT {', '.join(col_left)}
             FROM `{project_id}`.`{dataset}`.`csv`
             WHERE faultNumber in {fault}
-                AND simulationRun = 1
-                AND MOD(sample, {sample_division}) = 0
+                AND MOD(sample, {sample_division}) = 1
                 AND simulationRun <= {number_simulations}
             ORDER BY simulationRun, faultNumber, sample
             """
@@ -39,7 +38,7 @@ def get_data(
             query = f"""
             SELECT {', '.join(col_to_keep)}
             FROM `{project_id}`.`{dataset}`.`csv`
-            WHERE MOD(sample, {sample_division}) = 0
+            WHERE MOD(sample, {sample_division}) = 1
             AND simulationRun <= {number_simulations}
             ORDER BY simulationRun, faultNumber, sample
             """
@@ -49,8 +48,7 @@ def get_data(
             SELECT {', '.join(col_to_keep)}
             FROM `{project_id}`.`{dataset}`.`csv`
             WHERE faultNumber in {fault}
-                AND simulationRun = 1
-                AND MOD(sample, {sample_division}) = 0
+                AND MOD(sample, {sample_division}) = 1
                 AND simulationRun <= {number_simulations}
             ORDER BY simulationRun, faultNumber, sample
             """

@@ -57,3 +57,17 @@ MODEL_ARCHITECTURE = os.environ.get('MODEL_ARCHITECTURE')
 NUMBER_SIMULATIONS = os.environ.get('NUMBER_SIMULATIONS')
 
 MODEL_NAME = os.environ.get("MODEL_NAME")
+MASK_VALUE = int(os.environ.get("MASK_VALUE"))
+
+FAULT_TABLE = {0:0,
+               1:1,
+               2:2,
+                4:3,
+               6:4,
+               7:5,
+               12:6,
+               13:7,
+               14:8,
+               17:9,
+               18:10
+                }
